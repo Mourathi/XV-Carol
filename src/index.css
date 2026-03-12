@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --rose: #c9547a;
+  --rose-light: #e8829e;
+  --rose-pale: #f4c5d2;
+  --rose-blush: #fdf0f4;
+  --rose-deep: #a03060;
+  --cream: #fdfaf8;
+  --shadow-soft: 0 4px 20px -4px rgb(192 84 122 / 12%);
+  --shadow-card: 0 8px 32px -8px rgb(160 48 96 / 15%);
+  --shadow-hover: 0 12px 40px -8px rgb(160 48 96 / 20%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background-color: var(--cream);
+  color: var(--rose-deep);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Padrão sutil de pontos para backgrounds */
+.bg-dots {
+  background-image: radial-gradient(circle at 1px 1px, var(--rose-pale) 1px, transparent 0);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  opacity: 0.4;
+}
+
+/* Animação ambiente do Hero */
+@keyframes sparkle-drift-ltr {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+@keyframes sparkle-drift-rev {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100vw);
+  }
+}
+
+.hero-sparkle {
+  will-change: transform;
+}
+
