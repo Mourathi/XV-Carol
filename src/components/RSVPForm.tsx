@@ -13,6 +13,7 @@ export function RSVPForm() {
   const { confirmPresence, loading } = useRSVP()
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,12 +36,29 @@ export function RSVPForm() {
     if (result.success) {
       setName('')
       setPhone('')
-      setToast({ message: 'Presença confirmada com sucesso!', type: 'success' })
-      setTimeout(() => setToast(null), 3000)
+      setConfirmed(true)
     } else {
       setToast({ message: result.error ?? 'Erro ao confirmar.', type: 'error' })
       setTimeout(() => setToast(null), 3000)
     }
+  }
+
+  if (confirmed) {
+    return (
+      <section className="py-20 px-4 relative overflow-hidden">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white/85 backdrop-blur-sm border border-rose-pale/50 rounded-[1.5rem] p-8 md:p-12 shadow-soft text-center animate-fade-in">
+            <span className="text-4xl mb-4 block" aria-hidden>💕</span>
+            <p className="font-great-vibes text-rose-deep text-3xl md:text-4xl mb-3">
+              Obrigada!
+            </p>
+            <p className="font-cormorant text-rose-light text-lg leading-relaxed">
+              Sua presença é um presente. Estamos ansiosos para celebrar com você!
+            </p>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (
