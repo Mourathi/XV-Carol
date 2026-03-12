@@ -56,12 +56,7 @@ export function GiftList() {
           Escolha uma sugestão abaixo e registre sua escolha!
         </p>
 
-        <div
-          className="grid gap-5 md:gap-6"
-          style={{
-            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {gifts.map((gift) => (
             <GiftCard key={gift.id} gift={gift} onChoose={handleChooseClick} />
           ))}

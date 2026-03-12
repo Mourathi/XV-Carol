@@ -10,11 +10,11 @@ export function GiftCard({ gift, onChoose }: GiftCardProps) {
 
   return (
     <div
-      className="group relative p-6 bg-white/90 backdrop-blur-sm border border-rose-pale/60 rounded-card shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-card-hover hover:border-rose-pale cursor-pointer"
+      className="group relative h-full flex flex-col items-start text-left p-6 bg-white/90 backdrop-blur-sm border border-rose-pale/60 rounded-card shadow-soft transition-all duration-300 hover:-translate-y-2 hover:shadow-card-hover hover:border-rose-pale cursor-pointer"
       onClick={() => onChoose(gift)}
     >
       <span
-        className="inline-flex items-center justify-center w-14 h-14 rounded-soft bg-rose-blush/70 text-3xl mb-3"
+        className="flex items-center justify-start w-14 h-14 shrink-0 rounded-soft bg-rose-blush/70 text-3xl mb-3"
         aria-hidden
       >
         {gift.emoji}
@@ -29,13 +29,14 @@ export function GiftCard({ gift, onChoose }: GiftCardProps) {
         </p>
       )}
 
+      <div className="flex-1 min-h-6" />
       <button
         type="button"
         onClick={(e) => {
           e.stopPropagation()
           onChoose(gift)
         }}
-        className="mt-4 w-full py-3 px-4 font-cormorant text-sm font-medium bg-rose text-white rounded-elegant hover:bg-rose-deep transition-all duration-300"
+        className="self-stretch mt-6 py-3 px-4 font-cormorant text-sm font-medium bg-rose text-white rounded-elegant hover:bg-rose-deep transition-all duration-300"
       >
         Vou dar este presente
       </button>
