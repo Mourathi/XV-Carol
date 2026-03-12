@@ -68,7 +68,7 @@ export function RSVPForm() {
           Confirme sua presença
         </h2>
         <p className="font-cormorant text-rose-light mb-8 text-lg text-center">
-          Por favor, confirme sua presença até o dia 10 de março de 2026.
+          Por favor, confirme sua presença até o dia 7 de Maio de 2026.
         </p>
 
         <form

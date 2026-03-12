@@ -32,8 +32,11 @@ export function GiftCard({ gift, onReserve }: GiftCardProps) {
         {gift.emoji}
       </span>
       <h3 className="font-playfair text-rose-deep text-lg mb-1">{gift.name}</h3>
+      {gift.description && (
+        <p className="font-cormorant text-rose-light text-sm mb-2 italic">{gift.description}</p>
+      )}
       {isReserved && gift.reserved_by && (
-        <p className="font-cormorant italic text-rose-light text-sm mb-4">
+        <p className="font-cormorant italic text-rose-light text-sm mb-3">
           por {gift.reserved_by}
         </p>
       )}

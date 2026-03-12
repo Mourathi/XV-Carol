@@ -75,7 +75,7 @@ export function Hero() {
           className="font-cormorant text-rose-deep text-lg md:text-xl animate-fade-up opacity-0"
           style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}
         >
-          <span className="font-playfair font-medium">Data:</span> 15 de março de 2026
+          <span className="font-playfair font-medium">Data:</span> 17 de Maio de 2026
         </p>
         <p
           className="font-cormorant text-rose-deep text-lg md:text-xl mt-1 animate-fade-up opacity-0"

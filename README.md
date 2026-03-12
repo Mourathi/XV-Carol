@@ -24,17 +24,13 @@ cp .env.example .env
 
 ### 2. Supabase
 
-Execute o SQL em `supabase-setup.sql` no **SQL Editor** do Supabase para criar as tabelas `gifts` e `rsvps` e as políticas RLS.
-
-Se já tiver as tabelas criadas antes, execute `supabase-migration.sql` para adicionar a coluna `reserved_phone` e a tabela `rsvps`.
-
-Depois, insira os presentes na tabela ou use a interface do Supabase.
+As tabelas `gifts` e `rsvps` já estão configuradas no projeto. Gerencie os dados pela interface do Supabase.
 
 ### 3. Logo
 
 Coloque o arquivo `logo-caroline.png` na pasta `public/`. Se não existir, será usado o placeholder SVG.
 
-### 4. Dados do evento
+### 4. Dados do evento (opcional)
 
 Atualize em `src/components/Hero.tsx` e `src/components/EventDetails.tsx`:
 
