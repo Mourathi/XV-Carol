@@ -48,9 +48,15 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto">
+        <p
+          className="font-playfair text-rose-deep text-xl md:text-2xl lg:text-3xl font-medium mb-8 animate-fade-up opacity-0"
+          style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
+        >
+          É com muita alegria que convidamos você
+        </p>
         <div
           className="animate-scale-in opacity-0"
-          style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
+          style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
         >
           <img
             src="/Moura-xv-logo.svg"
@@ -59,9 +65,9 @@ export function Hero() {
           />
         </div>
 
-        {/* Divider decorativo — linha curva com detalhe */}
+        {/* Divider decorativo */}
         <div
-          className="flex items-center gap-4 mt-12 mb-8 animate-fade-up opacity-0"
+          className="flex items-center gap-4 mt-10 mb-6 animate-fade-up opacity-0"
           style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
         >
           <span className="w-20 h-px bg-gradient-to-r from-transparent to-rose-pale" />
@@ -72,13 +78,20 @@ export function Hero() {
         </div>
 
         <p
-          className="font-cormorant text-rose-deep text-lg md:text-xl animate-fade-up opacity-0"
+          className="font-cormorant italic text-rose-light text-lg md:text-xl animate-fade-up opacity-0"
+          style={{ animationDelay: '0.45s', animationFillMode: 'forwards' }}
+        >
+          Sua presença é nosso maior presente
+        </p>
+
+        <p
+          className="font-cormorant text-rose-deep text-xl md:text-2xl mt-6 animate-fade-up opacity-0"
           style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}
         >
           <span className="font-playfair font-medium">Data:</span> 17 de Maio de 2026
         </p>
         <p
-          className="font-cormorant text-rose-deep text-lg md:text-xl mt-1 animate-fade-up opacity-0"
+          className="font-cormorant text-rose-deep text-xl md:text-2xl mt-1 animate-fade-up opacity-0"
           style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
         >
           <span className="font-playfair font-medium">Local:</span> Salão de festas

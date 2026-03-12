@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import type { Gift } from '@/types/gift'
+import type { GiftWithChoices } from '@/types/gift'
 
 export function useGifts() {
-  const [gifts, setGifts] = useState<Gift[]>([])
+  const [gifts, setGifts] = useState<GiftWithChoices[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -12,13 +12,21 @@ export function useGifts() {
       try {
         const { data, error: fetchError } = await supabase
           .from('gifts')
-          .select('*')
+          .select(`
+            *,
+            gift_choices (id, name, gift_id, created_at)
+          `)
           .order('created_at', { ascending: true })
 
         if (fetchError) throw fetchError
-        setGifts(data ?? [])
+        setGifts(
+          (data ?? []).map((g) => ({
+            ...g,
+            gift_choices: Array.isArray(g.gift_choices) ? g.gift_choices : [],
+          }))
+        )
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar presentes')
+        setError(err instanceof Error ? err.message : 'Erro ao carregar sugestões')
       } finally {
         setLoading(false)
       }
@@ -29,16 +37,19 @@ export function useGifts() {
 
   useEffect(() => {
     const channel = supabase
-      .channel('gifts')
+      .channel('gift_choices')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'gifts' },
-        (payload) => {
-          if (payload.eventType === 'UPDATE') {
-            setGifts((prev) =>
-              prev.map((g) => (g.id === payload.new.id ? (payload.new as Gift) : g))
+        { event: 'INSERT', schema: 'public', table: 'gift_choices' },
+        async (payload) => {
+          const newChoice = payload.new as { id: string; gift_id: string; name: string; created_at: string }
+          setGifts((prev) =>
+            prev.map((g) =>
+              g.id === newChoice.gift_id
+                ? { ...g, gift_choices: [...(g.gift_choices ?? []), { id: newChoice.id, name: newChoice.name, gift_id: newChoice.gift_id, phone: '', created_at: newChoice.created_at }] }
+                : g
             )
-          }
+          )
         }
       )
       .subscribe()
@@ -48,43 +59,28 @@ export function useGifts() {
     }
   }, [])
 
-  const reserveGift = async (
+  const chooseGift = async (
     giftId: string,
     name: string,
     phone: string
   ): Promise<{ success: boolean; error?: string }> => {
     try {
-      const { data, error: updateError } = await supabase
-        .from('gifts')
-        .update({
-          reserved: true,
-          reserved_by: name.trim(),
-          reserved_phone: phone.trim(),
-          reserved_at: new Date().toISOString(),
-        })
-        .eq('id', giftId)
-        .eq('reserved', false)
-        .select()
+      const { error: insertError } = await supabase.from('gift_choices').insert({
+        gift_id: giftId,
+        name: name.trim(),
+        phone: phone.trim(),
+      })
 
-      if (updateError) {
-        if (updateError.code === 'PGRST116') {
-          return { success: false, error: 'Este presente já foi reservado por outra pessoa.' }
-        }
-        throw updateError
-      }
-
-      if (!data || data.length === 0) {
-        return { success: false, error: 'Este presente já foi reservado por outra pessoa.' }
-      }
+      if (insertError) throw insertError
 
       return { success: true }
     } catch (err) {
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Erro ao reservar presente.',
+        error: err instanceof Error ? err.message : 'Erro ao registrar escolha.',
       }
     }
   }
 
-  return { gifts, loading, error, reserveGift }
+  return { gifts, loading, error, chooseGift }
 }

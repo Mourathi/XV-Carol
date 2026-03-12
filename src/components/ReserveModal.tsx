@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import type { Gift } from '@/types/gift'
+import type { GiftWithChoices } from '@/types/gift'
 
-interface ReserveModalProps {
-  gift: Gift | null
+interface ChooseModalProps {
+  gift: GiftWithChoices | null
   onClose: () => void
   onConfirm: (giftId: string, name: string, phone: string) => Promise<{ success: boolean; error?: string }>
 }
@@ -14,7 +14,7 @@ function formatPhone(value: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`
 }
 
-export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
+export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
@@ -31,8 +31,7 @@ export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
   }, [gift])
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value)
-    setPhone(formatted)
+    setPhone(formatPhone(e.target.value))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +54,7 @@ export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
     if (result.success) {
       onClose()
     } else {
-      setError(result.error ?? 'Erro ao reservar.')
+      setError(result.error ?? 'Erro ao registrar.')
     }
   }
 
@@ -79,19 +78,19 @@ export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
 
       <div className="relative bg-cream/95 backdrop-blur-sm border border-rose-pale/60 p-6 md:p-8 max-w-md w-full rounded-soft shadow-card">
         <h2 id="modal-title" className="font-playfair text-rose-deep text-xl mb-2">
-          Reservar presente
+          Vou dar este presente
         </h2>
         <p className="font-cormorant text-rose-light mb-6">
           {gift.emoji} {gift.name}
         </p>
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="reserve-name" className="block font-cormorant text-rose-deep text-sm mb-2">
+          <label htmlFor="choose-name" className="block font-cormorant text-rose-deep text-sm mb-2">
             Seu nome
           </label>
           <input
             ref={inputRef}
-            id="reserve-name"
+            id="choose-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -101,11 +100,11 @@ export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
             className="w-full px-4 py-3 border border-rose-pale/60 rounded-elegant font-cormorant text-rose-deep placeholder:text-rose-light/70 focus:outline-none focus:ring-2 focus:ring-rose/40 focus:border-rose-pale disabled:opacity-60 transition-all mb-4"
           />
 
-          <label htmlFor="reserve-phone" className="block font-cormorant text-rose-deep text-sm mb-2">
+          <label htmlFor="choose-phone" className="block font-cormorant text-rose-deep text-sm mb-2">
             Seu telefone
           </label>
           <input
-            id="reserve-phone"
+            id="choose-phone"
             type="tel"
             value={phone}
             onChange={handlePhoneChange}
@@ -133,7 +132,7 @@ export function ReserveModal({ gift, onClose, onConfirm }: ReserveModalProps) {
               disabled={loading || !name.trim() || !phone.trim()}
               className="flex-1 py-3 px-4 font-cormorant bg-rose text-white rounded-elegant hover:bg-rose-deep disabled:opacity-60 transition-all"
             >
-              {loading ? 'Reservando...' : 'Confirmar'}
+              {loading ? 'Registrando...' : 'Confirmar'}
             </button>
           </div>
         </form>

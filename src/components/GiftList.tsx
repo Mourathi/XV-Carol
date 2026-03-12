@@ -3,23 +3,23 @@ import { GiftCard } from './GiftCard'
 import { ReserveModal } from './ReserveModal'
 import { Toast } from './Toast'
 import { useGifts } from '@/hooks/useGifts'
-import type { Gift } from '@/types/gift'
+import type { GiftWithChoices } from '@/types/gift'
 
 export function GiftList() {
-  const { gifts, loading, error, reserveGift } = useGifts()
-  const [selectedGift, setSelectedGift] = useState<Gift | null>(null)
+  const { gifts, loading, error, chooseGift } = useGifts()
+  const [selectedGift, setSelectedGift] = useState<GiftWithChoices | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
-  const handleReserveClick = (gift: Gift) => {
+  const handleChooseClick = (gift: GiftWithChoices) => {
     setSelectedGift(gift)
   }
 
-  const handleConfirmReserve = async (giftId: string, name: string, phone: string) => {
-    const result = await reserveGift(giftId, name, phone)
+  const handleConfirmChoose = async (giftId: string, name: string, phone: string) => {
+    const result = await chooseGift(giftId, name, phone)
 
     if (result.success) {
       setSelectedGift(null)
-      setToast({ message: 'Presente reservado com sucesso!', type: 'success' })
+      setToast({ message: 'Escolha registrada! Obrigada!', type: 'success' })
       setTimeout(() => setToast(null), 3000)
     }
 
@@ -30,7 +30,7 @@ export function GiftList() {
     return (
       <section className="py-20 px-4 bg-rose-blush/50 relative overflow-hidden">
         <div className="max-w-5xl mx-auto text-center">
-          <p className="font-cormorant text-rose-light text-lg">Carregando lista de presentes...</p>
+          <p className="font-cormorant text-rose-light text-lg">Carregando sugestões...</p>
         </div>
       </section>
     )
@@ -49,9 +49,12 @@ export function GiftList() {
   return (
     <section className="py-20 px-4 bg-rose-blush/50 relative overflow-hidden">
       <div className="max-w-5xl mx-auto">
-        <h2 className="font-playfair text-rose-deep text-2xl md:text-3xl text-center mb-14 font-medium tracking-wide">
-          Lista de Presentes
+        <h2 className="font-playfair text-rose-deep text-2xl md:text-3xl text-center mb-4 font-medium tracking-wide">
+          Sugestões de Presentes
         </h2>
+        <p className="font-cormorant text-rose-light text-center mb-14">
+          Escolha uma sugestão abaixo e registre sua escolha!
+        </p>
 
         <div
           className="grid gap-5 md:gap-6"
@@ -60,13 +63,13 @@ export function GiftList() {
           }}
         >
           {gifts.map((gift) => (
-            <GiftCard key={gift.id} gift={gift} onReserve={handleReserveClick} />
+            <GiftCard key={gift.id} gift={gift} onChoose={handleChooseClick} />
           ))}
         </div>
 
         {gifts.length === 0 && (
           <p className="font-cormorant text-rose-light text-center py-12 text-lg">
-            Nenhum presente na lista no momento.
+            Nenhuma sugestão no momento.
           </p>
         )}
       </div>
@@ -74,7 +77,7 @@ export function GiftList() {
       <ReserveModal
         gift={selectedGift}
         onClose={() => setSelectedGift(null)}
-        onConfirm={handleConfirmReserve}
+        onConfirm={handleConfirmChoose}
       />
 
       <Toast
