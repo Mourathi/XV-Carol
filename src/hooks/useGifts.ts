@@ -61,14 +61,12 @@ export function useGifts() {
 
   const chooseGift = async (
     giftId: string,
-    name: string,
-    phone: string
+    name: string
   ): Promise<{ success: boolean; error?: string }> => {
     try {
       const { error: insertError } = await supabase.from('gift_choices').insert({
         gift_id: giftId,
         name: name.trim(),
-        phone: phone.trim(),
       })
 
       if (insertError) throw insertError

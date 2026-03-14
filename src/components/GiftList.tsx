@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { GiftCard } from './GiftCard'
 import { ReserveModal } from './ReserveModal'
+import { BookModal } from './BookModal'
 import { Toast } from './Toast'
 import { useGifts } from '@/hooks/useGifts'
+import { useGiftBooks, isRomanceBookGift } from '@/hooks/useGiftBooks'
 import type { GiftWithChoices } from '@/types/gift'
 
 export function GiftList() {
@@ -10,20 +12,34 @@ export function GiftList() {
   const [selectedGift, setSelectedGift] = useState<GiftWithChoices | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
+  const romanceGift = gifts.find((g) => isRomanceBookGift(g.name))
+  const { books: romanceBooks } = useGiftBooks(romanceGift?.id ?? null)
+
+  const isRomanceBook = selectedGift ? isRomanceBookGift(selectedGift.name) : false
+
   const handleChooseClick = (gift: GiftWithChoices) => {
     setSelectedGift(gift)
   }
 
-  const handleConfirmChoose = async (giftId: string, name: string, phone: string) => {
-    const result = await chooseGift(giftId, name, phone)
+  const showToast = () => {
+    setToast({ message: 'Escolha registrada! Obrigada!', type: 'success' })
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  const handleConfirmChoose = async (giftId: string, name: string) => {
+    const result = await chooseGift(giftId, name)
 
     if (result.success) {
       setSelectedGift(null)
-      setToast({ message: 'Escolha registrada! Obrigada!', type: 'success' })
-      setTimeout(() => setToast(null), 3000)
+      showToast()
     }
 
     return result
+  }
+
+  const handleBookSuccess = () => {
+    setSelectedGift(null)
+    showToast()
   }
 
   if (loading) {
@@ -58,7 +74,19 @@ export function GiftList() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {gifts.map((gift) => (
-            <GiftCard key={gift.id} gift={gift} onChoose={handleChooseClick} />
+            <GiftCard
+              key={gift.id}
+              gift={gift}
+              onChoose={handleChooseClick}
+              booksChosenCount={
+                isRomanceBookGift(gift.name)
+                  ? romanceBooks.filter((b) => b.choice).length
+                  : undefined
+              }
+              booksTotalCount={
+                isRomanceBookGift(gift.name) ? romanceBooks.length : undefined
+              }
+            />
           ))}
         </div>
 
@@ -69,11 +97,19 @@ export function GiftList() {
         )}
       </div>
 
-      <ReserveModal
-        gift={selectedGift}
-        onClose={() => setSelectedGift(null)}
-        onConfirm={handleConfirmChoose}
-      />
+      {isRomanceBook ? (
+        <BookModal
+          gift={selectedGift}
+          onClose={() => setSelectedGift(null)}
+          onSuccess={handleBookSuccess}
+        />
+      ) : (
+        <ReserveModal
+          gift={selectedGift}
+          onClose={() => setSelectedGift(null)}
+          onConfirm={handleConfirmChoose}
+        />
+      )}
 
       <Toast
         message={toast?.message ?? ''}

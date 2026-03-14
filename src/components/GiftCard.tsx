@@ -3,10 +3,16 @@ import type { GiftWithChoices } from '@/types/gift'
 interface GiftCardProps {
   gift: GiftWithChoices
   onChoose: (gift: GiftWithChoices) => void
+  booksChosenCount?: number
+  booksTotalCount?: number
 }
 
-export function GiftCard({ gift, onChoose }: GiftCardProps) {
+export function GiftCard({ gift, onChoose, booksChosenCount, booksTotalCount }: GiftCardProps) {
   const count = (gift.gift_choices ?? []).length
+  const showBooksCount =
+    booksChosenCount !== undefined &&
+    booksTotalCount !== undefined &&
+    booksTotalCount > 0
 
   return (
     <div
@@ -23,10 +29,16 @@ export function GiftCard({ gift, onChoose }: GiftCardProps) {
       {gift.description && (
         <p className="font-cormorant text-rose-light text-sm mb-2 italic">{gift.description}</p>
       )}
-      {count >= 2 && (
+      {showBooksCount ? (
         <p className="font-cormorant text-rose-light text-sm mb-3">
-          {count} pessoas vão dar este presente
+          {booksChosenCount} de {booksTotalCount} livro(s) escolhido(s)
         </p>
+      ) : (
+        count >= 2 && (
+          <p className="font-cormorant text-rose-light text-sm mb-3">
+            {count} pessoas vão dar este presente
+          </p>
+        )
       )}
 
       <div className="flex-1 min-h-6" />

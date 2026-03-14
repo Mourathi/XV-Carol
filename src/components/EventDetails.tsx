@@ -7,17 +7,29 @@ const cards = [
   {
     emoji: '🕐',
     label: 'Horário',
-    value: '19h',
+    value: 'As 13:00 horas',
   },
   {
     emoji: '📍',
     label: 'Local',
-    value: 'Salão de festas',
+    value: (
+      <>
+        Espaço Maria Lucia
+        <br />
+        Rua Padre João, 300 - Penha de frança
+      </>
+    ),
   },
   {
     emoji: '👗',
     label: 'Traje',
-    value: 'Esporte fino (Não usar rosa)',
+    value: (
+      <>
+        Esporte fino
+        <br />
+        (Não usar rosa)
+      </>
+    ),
   },
 ]
 

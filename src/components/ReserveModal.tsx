@@ -4,19 +4,12 @@ import type { GiftWithChoices } from '@/types/gift'
 interface ChooseModalProps {
   gift: GiftWithChoices | null
   onClose: () => void
-  onConfirm: (giftId: string, name: string, phone: string) => Promise<{ success: boolean; error?: string }>
-}
-
-function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, '')
-  if (digits.length <= 2) return digits ? `(${digits}` : ''
-  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`
+  onConfirm: (giftId: string, name: string) => Promise<{ success: boolean; error?: string }>
 }
 
 export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
   const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -24,30 +17,20 @@ export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
   useEffect(() => {
     if (gift) {
       setName('')
-      setPhone('')
       setError(null)
+      setShowCancelConfirm(false)
       setTimeout(() => inputRef.current?.focus(), 100)
     }
   }, [gift])
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(formatPhone(e.target.value))
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!gift || !name.trim() || !phone.trim()) return
-
-    const phoneDigits = phone.replace(/\D/g, '')
-    if (phoneDigits.length < 10) {
-      setError('Informe um número de telefone válido.')
-      return
-    }
+    if (!gift || !name.trim()) return
 
     setLoading(true)
     setError(null)
 
-    const result = await onConfirm(gift.id, name.trim(), phoneDigits)
+    const result = await onConfirm(gift.id, name.trim())
 
     setLoading(false)
 
@@ -68,15 +51,15 @@ export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
       aria-labelledby="modal-title"
     >
       <div
-        className="absolute inset-0 bg-rose-deep/20 backdrop-blur-md"
-        onClick={onClose}
-        onKeyDown={(e) => e.key === 'Escape' && onClose()}
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={() => (showCancelConfirm ? setShowCancelConfirm(false) : onClose())}
+        onKeyDown={(e) => e.key === 'Escape' && (showCancelConfirm ? setShowCancelConfirm(false) : onClose())}
         role="button"
         tabIndex={0}
         aria-label="Fechar modal"
       />
 
-      <div className="relative bg-cream/95 backdrop-blur-sm border border-rose-pale/60 p-6 md:p-8 max-w-md w-full rounded-soft shadow-card">
+      <div className="relative bg-white border-2 border-rose-pale/80 p-6 md:p-8 max-w-md w-full rounded-soft shadow-2xl">
         <h2 id="modal-title" className="font-playfair text-rose-deep text-xl mb-2">
           Vou dar este presente
         </h2>
@@ -97,20 +80,6 @@ export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
             placeholder="Digite seu nome completo"
             required
             disabled={loading}
-            className="w-full px-4 py-3 border border-rose-pale/60 rounded-elegant font-cormorant text-rose-deep placeholder:text-rose-light/70 focus:outline-none focus:ring-2 focus:ring-rose/40 focus:border-rose-pale disabled:opacity-60 transition-all mb-4"
-          />
-
-          <label htmlFor="choose-phone" className="block font-cormorant text-rose-deep text-sm mb-2">
-            Seu telefone
-          </label>
-          <input
-            id="choose-phone"
-            type="tel"
-            value={phone}
-            onChange={handlePhoneChange}
-            placeholder="(11) 99999-9999"
-            required
-            disabled={loading}
             className="w-full px-4 py-3 border border-rose-pale/60 rounded-elegant font-cormorant text-rose-deep placeholder:text-rose-light/70 focus:outline-none focus:ring-2 focus:ring-rose/40 focus:border-rose-pale disabled:opacity-60 transition-all"
           />
 
@@ -118,10 +87,31 @@ export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
             <p className="mt-2 font-cormorant text-rose-deep/80 text-sm">{error}</p>
           )}
 
+          {showCancelConfirm ? (
+            <div className="mt-6 p-4 bg-rose-blush/80 rounded-elegant border border-rose-pale/60">
+              <p className="font-cormorant text-rose-deep text-sm mb-3">Tem certeza que deseja cancelar?</p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowCancelConfirm(false)}
+                  className="flex-1 py-2 px-4 font-cormorant text-sm border border-rose-pale/60 text-rose-deep rounded-elegant hover:bg-rose-blush/50 transition-all"
+                >
+                  Não, continuar
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 py-2 px-4 font-cormorant text-sm bg-rose text-white rounded-elegant hover:bg-rose-deep transition-all"
+                >
+                  Sim, cancelar
+                </button>
+              </div>
+            </div>
+          ) : (
           <div className="flex gap-3 mt-6">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => setShowCancelConfirm(true)}
               disabled={loading}
               className="flex-1 py-3 px-4 font-cormorant border border-rose-pale/60 text-rose-deep rounded-elegant hover:bg-rose-blush/50 transition-all disabled:opacity-60"
             >
@@ -129,12 +119,13 @@ export function ReserveModal({ gift, onClose, onConfirm }: ChooseModalProps) {
             </button>
             <button
               type="submit"
-              disabled={loading || !name.trim() || !phone.trim()}
+              disabled={loading || !name.trim()}
               className="flex-1 py-3 px-4 font-cormorant bg-rose text-white rounded-elegant hover:bg-rose-deep disabled:opacity-60 transition-all"
             >
               {loading ? 'Registrando...' : 'Confirmar'}
             </button>
           </div>
+          )}
         </form>
       </div>
     </div>

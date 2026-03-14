@@ -21,3 +21,21 @@ export interface GiftChoice {
 export interface GiftWithChoices extends Gift {
   gift_choices: GiftChoice[]
 }
+
+export interface GiftBook {
+  id: string
+  gift_id: string
+  title: string
+  sort_order: number
+}
+
+export interface GiftBookChoice {
+  id: string
+  book_id: string
+  name: string
+  created_at: string
+}
+
+export interface GiftBookWithChoice extends GiftBook {
+  choice?: GiftBookChoice | null
+}

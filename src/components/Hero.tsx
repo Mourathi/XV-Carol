@@ -52,7 +52,7 @@ export function Hero() {
           className="font-playfair text-rose-deep text-xl md:text-2xl lg:text-3xl font-medium mb-8 animate-fade-up opacity-0"
           style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
         >
-          É com muita alegria que convidamos você
+          É com muita alegria que convidamos você para celebrar
         </p>
         <div
           className="animate-scale-in opacity-0"
@@ -94,7 +94,7 @@ export function Hero() {
           className="font-cormorant text-rose-deep text-xl md:text-2xl mt-1 animate-fade-up opacity-0"
           style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
         >
-          <span className="font-playfair font-medium">Local:</span> Salão de festas
+          <span className="font-playfair font-medium">Local:</span> Espaço Maria Lucia
         </p>
       </div>
 
