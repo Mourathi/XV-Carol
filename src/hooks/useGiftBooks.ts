@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { GiftBookWithChoice } from '@/types/gift'
 
-const LIVRO_ROMANCE_GIFT_NAME = 'Livro de Romance'
-
 export function useGiftBooks(giftId: string | null) {
   const [books, setBooks] = useState<GiftBookWithChoice[]>([])
   const [loading, setLoading] = useState(true)
