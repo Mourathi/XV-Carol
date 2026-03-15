@@ -13,11 +13,16 @@ const cards = [
     emoji: '📍',
     label: 'Local',
     value: (
-      <>
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=Espaço+Maria+Lucia+Rua+Padre+João+300+Penha+de+França+São+Paulo"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:underline hover:text-rose-deep/90 transition-colors"
+      >
         Espaço Maria Lucia
         <br />
-        Rua Padre João, 300 - Penha de frança
-      </>
+        Rua Padre João, 300 - Penha de França
+      </a>
     ),
   },
   {
