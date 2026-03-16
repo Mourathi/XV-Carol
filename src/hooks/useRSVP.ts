@@ -27,7 +27,7 @@ export function useRSVP() {
       if (existing && existing.length > 0) {
         return {
           success: false,
-          error: 'Este número já confirmou presença.',
+          error: 'Sei que está ansioso(a), mas você já confirmou! 💕',
         }
       }
 
