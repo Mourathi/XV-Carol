@@ -13,9 +13,27 @@ export function useRSVP() {
       setLoading(true)
       setError(null)
 
+      const phoneDigits = phone.replace(/\D/g, '')
+      const phoneNorm = phoneDigits.length === 13 && phoneDigits.startsWith('55')
+        ? phoneDigits.slice(2)
+        : phoneDigits
+
+      const { data: existing } = await supabase
+        .from('rsvps')
+        .select('id')
+        .or(`phone.eq.${phoneNorm},phone.eq.55${phoneNorm}`)
+        .limit(1)
+
+      if (existing && existing.length > 0) {
+        return {
+          success: false,
+          error: 'Este número já confirmou presença.',
+        }
+      }
+
       const { error: insertError } = await supabase.from('rsvps').insert({
         name: name.trim(),
-        phone: phone.trim(),
+        phone: phoneNorm,
       })
 
       if (insertError) throw insertError
