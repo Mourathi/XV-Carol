@@ -66,13 +66,13 @@ export function useAdmin() {
           (giftChoiceRes.data ?? []).map((row: Record<string, unknown>) => {
             const gifts = row.gifts as { name: string; emoji: string } | null
             return {
-              id: row.id,
-              gift_id: row.gift_id,
-              name: row.name,
+              id: String(row.id ?? ''),
+              gift_id: String(row.gift_id ?? ''),
+              name: String(row.name ?? ''),
               gift_name: gifts?.name ?? '-',
               gift_emoji: gifts?.emoji ?? '',
-              created_at: row.created_at,
-            }
+              created_at: String(row.created_at ?? ''),
+            } as GiftChoiceRow
           })
         )
 
@@ -80,12 +80,12 @@ export function useAdmin() {
           (bookChoiceRes.data ?? []).map((row: Record<string, unknown>) => {
             const books = row.gift_books as { title: string } | null
             return {
-              id: row.id,
-              book_id: row.book_id,
+              id: String(row.id ?? ''),
+              book_id: String(row.book_id ?? ''),
               book_title: books?.title ?? '-',
-              name: row.name,
-              created_at: row.created_at,
-            }
+              name: String(row.name ?? ''),
+              created_at: String(row.created_at ?? ''),
+            } as BookChoiceRow
           })
         )
       } catch (err) {
