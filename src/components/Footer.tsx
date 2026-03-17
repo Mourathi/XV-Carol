@@ -7,7 +7,7 @@ export function Footer() {
       />
       <div className="relative">
         <p className="font-great-vibes text-rose-pale text-3xl md:text-4xl text-center">
-          Caroline Moura
+          Caroline Moura De Brito
         </p>
         <p className="font-cormorant text-rose-light/80 text-sm text-center mt-3 tracking-widest uppercase">
           Quinze Anos · 2026
