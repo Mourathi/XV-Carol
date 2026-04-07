@@ -4,6 +4,7 @@ import { GiftList } from '@/components/GiftList'
 import { Footer } from '@/components/Footer'
 import { SectionDivider } from '@/components/SectionDivider'
 import { RSVPForm } from '@/components/RSVPForm'
+import { ConfirmPresenceFab } from '@/components/ConfirmPresenceFab'
 
 export function Home() {
   return (
@@ -16,6 +17,7 @@ export function Home() {
       <SectionDivider variant="wave" />
       <RSVPForm />
       <Footer />
+      <ConfirmPresenceFab />
     </main>
   )
 }

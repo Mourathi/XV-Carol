@@ -45,7 +45,10 @@ export function RSVPForm() {
 
   if (confirmed) {
     return (
-      <section className="py-20 px-4 relative overflow-hidden">
+      <section
+        id="confirmacao-presenca"
+        className="py-20 px-4 relative overflow-hidden scroll-mt-6"
+      >
         <div className="max-w-md mx-auto">
           <div className="bg-white/85 backdrop-blur-sm border border-rose-pale/50 rounded-[1.5rem] p-8 md:p-12 shadow-soft text-center animate-fade-in">
             <span className="text-4xl mb-4 block" aria-hidden>💕</span>
@@ -62,7 +65,10 @@ export function RSVPForm() {
   }
 
   return (
-    <section className="py-20 px-4 relative overflow-hidden">
+    <section
+      id="confirmacao-presenca"
+      className="py-20 px-4 relative overflow-hidden scroll-mt-6"
+    >
       <div className="max-w-md mx-auto">
         <h2 className="font-playfair text-rose-deep text-2xl md:text-3xl text-center mb-4 font-medium tracking-wide">
           Confirme sua presença
