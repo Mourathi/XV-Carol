@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ConsultMyGift } from './ConsultMyGift'
 import { GiftCard } from './GiftCard'
 import { ReserveModal } from './ReserveModal'
 import { BookModal } from './BookModal'
@@ -68,9 +69,11 @@ export function GiftList() {
         <h2 className="font-playfair text-rose-deep text-2xl md:text-3xl text-center mb-4 font-medium tracking-wide">
           Sugestões de Presentes
         </h2>
-        <p className="font-cormorant text-rose-light text-center mb-14">
+        <p className="font-cormorant text-rose-light text-center mb-10">
           Escolha uma sugestão abaixo e registre sua escolha!
         </p>
+
+        <ConsultMyGift />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {gifts.map((gift) => (
